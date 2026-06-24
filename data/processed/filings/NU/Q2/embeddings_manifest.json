@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "chunks_total": 62,
+    "embedded_existing": 62,
+    "embedded_new": 62,
+    "embedded_total": 62
+  },
+  "embedding_dim": 1536,
+  "embedding_model": "text-embedding-3-small",
+  "errors": [],
+  "issuer": "NU",
+  "missing_text_rows": 0,
+  "output_file": "data/processed/filings/NU/Q2/embeddings.parquet",
+  "period": "Q2",
+  "retrieved_at": "2026-01-17T00:33:07.118562+00:00",
+  "runtime": {
+    "seconds": 3.412
+  },
+  "source_input": "data/processed/filings/NU/Q2/chunks.parquet"
+}
