@@ -95,4 +95,4 @@ def run_index(issuer: str, period: str, input_root: Path, output_root: Path) -> 
 
 def build_index_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--issuer", required=True, help="Issuer ticker (e.g., NU).")
-    parser.add_argument("--period", required=True, help="Period label (e.g., Q2).")
+    parser.add_argument("--period", required=True, help="Period label (e.g., 2025Q2).")

@@ -4,8 +4,6 @@ import re
 from pathlib import Path
 from typing import Dict, Iterable, List
 
-from pypdf import PdfReader
-
 MANIFEST_NAME = "manifest.json"
 
 
@@ -19,6 +17,14 @@ def _load_manifest(path: Path) -> Dict:
 
 
 def _extract_pages(pdf_path: Path) -> Iterable[str]:
+    try:
+        from pypdf import PdfReader
+    except ImportError as exc:
+        raise ImportError(
+            "pypdf is required for PDF parsing. Install it with "
+            "`pip install pypdf`."
+        ) from exc
+
     reader = PdfReader(str(pdf_path))
     for page in reader.pages:
         yield page.extract_text() or ""
@@ -75,4 +81,4 @@ def run_parse(issuer: str, period: str, input_root: Path, output_root: Path) -> 
 
 def build_parse_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--issuer", required=True, help="Issuer ticker (e.g., NU).")
-    parser.add_argument("--period", required=True, help="Period label (e.g., Q2).")
+    parser.add_argument("--period", required=True, help="Period label (e.g., 2025Q2).")

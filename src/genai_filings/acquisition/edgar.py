@@ -189,6 +189,23 @@ def build_document_url(cik_int: int, accession_number: str, primary_document: st
     )
 
 
+def canonical_period(report_date: str) -> str:
+    """Derive a canonical ``YYYYQN`` period label from a filing's report date.
+
+    The report date is the period-end (e.g. ``2026-03-31`` -> ``2026Q1``). Using
+    the actual filing's report date guarantees a year-qualified period even when
+    the caller passed a bare quarter like ``"Q1"`` — so all ingestion emits the
+    standard ``YYYYQN`` form, never a bare ``QN``.
+    """
+    parts = report_date.split("-")
+    if len(parts) < 2:
+        raise ValueError(f"Unexpected report date format: {report_date!r}.")
+    year = int(parts[0])
+    month = int(parts[1])
+    quarter = (month - 1) // 3 + 1
+    return f"{year}Q{quarter}"
+
+
 def run_edgar_fetch(
     issuer: str,
     period: str,
@@ -200,19 +217,26 @@ def run_edgar_fetch(
     """Fetch the target filing's primary document from EDGAR and write a manifest.
 
     Writes the HTML document plus a ``manifest.json`` to
-    ``output_root/{ISSUER}/{PERIOD}/`` in the same schema that the parsing step
-    consumes. ``doc_type`` defaults to the form name (e.g. ``"10-Q"``).
-    Returns the manifest dict.
+    ``output_root/{ISSUER}/{PERIOD}/`` where ``PERIOD`` is the canonical
+    ``YYYYQN`` label derived from the selected filing's report date — so the
+    output folder is always year-qualified even if the caller passed a bare
+    quarter (e.g. ``"Q1"``). ``doc_type`` defaults to the form name
+    (e.g. ``"10-Q"``). Returns the manifest dict; its ``period`` field is the
+    canonical label callers should use for the downstream stages.
     """
     doc_type = doc_type or form
-    output_dir = output_root / issuer.upper() / period.upper()
-    output_dir.mkdir(parents=True, exist_ok=True)
 
     getter = _RateLimitedGetter(make_session(user_agent))
 
     cik_int, cik10 = ticker_to_cik(issuer, getter)
     submissions = get_submissions(cik10, getter)
     filing = select_filing(submissions, period, form=form)
+
+    # Normalize to canonical YYYYQN from the filing's actual report date.
+    period_canonical = canonical_period(filing["reportDate"])
+    output_dir = output_root / issuer.upper() / period_canonical
+    output_dir.mkdir(parents=True, exist_ok=True)
+
     url = build_document_url(cik_int, filing["accessionNumber"], filing["primaryDocument"])
 
     response = getter.get(url)
@@ -241,7 +265,8 @@ def run_edgar_fetch(
     }
     manifest = {
         "issuer": issuer.upper(),
-        "period": period.upper(),
+        "period": period_canonical,
+        "period_requested": period.upper(),
         "source": "sec_edgar",
         "source_page": SUBMISSIONS_URL.format(cik10=cik10),
         "cik": cik_int,

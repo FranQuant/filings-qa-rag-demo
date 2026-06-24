@@ -217,7 +217,7 @@ def run_embed(
 
 def build_embed_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--issuer", required=True, help="Issuer ticker (e.g., NU).")
-    parser.add_argument("--period", required=True, help="Period label (e.g., Q2).")
+    parser.add_argument("--period", required=True, help="Period label (e.g., 2025Q2).")
     parser.add_argument("--model", required=True, help="Embedding model name.")
     parser.add_argument("--batch-size", type=int, default=64, help="Batch size.")
     parser.add_argument("--force", action="store_true", help="Re-embed all chunks.")

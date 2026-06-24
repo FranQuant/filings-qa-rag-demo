@@ -181,7 +181,7 @@ def retrieve(
 
 def build_retrieve_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--issuer", required=True, help="Issuer ticker (e.g., NU).")
-    parser.add_argument("--period", required=True, help="Period label (e.g., Q2).")
+    parser.add_argument("--period", required=True, help="Period label (e.g., 2025Q2).")
     parser.add_argument("--query", required=True, help="Query string.")
     parser.add_argument("--k", type=int, default=5, help="Top-K results.")
     parser.add_argument("--doc-type", dest="doc_type", help="Optional doc type filter.")

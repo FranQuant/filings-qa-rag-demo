@@ -213,4 +213,4 @@ def run_fetch(issuer: str, period: str, output_root: Path) -> Dict[str, Dict]:
 
 def build_fetch_parser(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--issuer", required=True, help="Issuer ticker (e.g., NU).")
-    parser.add_argument("--period", required=True, help="Period label (e.g., Q2).")
+    parser.add_argument("--period", required=True, help="Period label (e.g., 2025Q2).")

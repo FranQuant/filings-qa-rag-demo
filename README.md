@@ -8,7 +8,7 @@ company filings. Ask a question about an issuer's quarterly disclosures and get 
 specific document. The generation step is **switchable between OpenAI and
 Anthropic**, so you can compare frontier models on identical retrieved context.
 
-The bundled demo runs over **Nubank's Q2 filings** (earnings release, financial
+The bundled demo runs over **Nubank's Q2 2025 filings** (earnings release, financial
 statements, conference-call transcript — 62 chunks). Embeddings are precomputed and
 shipped with the repo, so it runs out of the box.
 
@@ -39,7 +39,7 @@ from genai_filings.answering import synthesize_answer
 
 answer = synthesize_answer(
     query="How is net interest margin evolving?",
-    issuer="NU", period="Q2", k=5,
+    issuer="NU", period="2025Q2", k=5,
     provider="anthropic",      # "openai" or "anthropic"
     model="claude-opus-4-8",   # omit for the provider default
     temperature=0.0, max_tokens=500,
