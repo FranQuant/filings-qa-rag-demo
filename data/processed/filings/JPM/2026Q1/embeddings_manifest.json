@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "chunks_total": 204,
+    "embedded_existing": 0,
+    "embedded_new": 204,
+    "embedded_total": 204
+  },
+  "embedding_dim": 1536,
+  "embedding_model": "text-embedding-3-small",
+  "errors": [],
+  "issuer": "JPM",
+  "missing_text_rows": 0,
+  "output_file": "data/processed/filings/JPM/2026Q1/embeddings.parquet",
+  "period": "2026Q1",
+  "retrieved_at": "2026-06-24T22:36:41.609935+00:00",
+  "runtime": {
+    "seconds": 4.287
+  },
+  "source_input": "data/processed/filings/JPM/2026Q1/chunks.parquet"
+}
