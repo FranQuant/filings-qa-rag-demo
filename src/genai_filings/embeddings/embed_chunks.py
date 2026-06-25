@@ -39,6 +39,20 @@ def _write_manifest(path: Path, manifest: Dict[str, object]) -> None:
         json.dump(manifest, handle, indent=2, sort_keys=True)
 
 
+def _relativize_path(path: Path) -> str:
+    """Render a path relative to the current working directory when possible.
+
+    Manifests are committed artifacts, so they must not leak absolute,
+    machine-specific paths (e.g. a user's home directory). When the path lives
+    under the repo root (the cwd for the pipeline), store it relative; otherwise
+    fall back to the path as given.
+    """
+    try:
+        return str(path.resolve().relative_to(Path.cwd().resolve()))
+    except ValueError:
+        return str(path)
+
+
 def _get_openai_client() -> object:
     try:
         from openai import OpenAI
@@ -196,8 +210,8 @@ def run_embed(
     manifest = {
         "issuer": issuer.upper(),
         "period": period.upper(),
-        "source_input": str(chunks_path),
-        "output_file": str(embeddings_path),
+        "source_input": _relativize_path(chunks_path),
+        "output_file": _relativize_path(embeddings_path),
         "embedding_model": model,
         "embedding_dim": embedding_dim,
         "retrieved_at": datetime.now(timezone.utc).isoformat(),

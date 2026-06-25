@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "chunks_total": 148,
+    "embedded_existing": 0,
+    "embedded_new": 148,
+    "embedded_total": 148
+  },
+  "embedding_dim": 1536,
+  "embedding_model": "text-embedding-3-small",
+  "errors": [],
+  "issuer": "BAC",
+  "missing_text_rows": 0,
+  "output_file": "data/processed/filings/BAC/2026Q1/embeddings.parquet",
+  "period": "2026Q1",
+  "retrieved_at": "2026-06-25T02:11:12.601449+00:00",
+  "runtime": {
+    "seconds": 4.999
+  },
+  "source_input": "data/processed/filings/BAC/2026Q1/chunks.parquet"
+}
